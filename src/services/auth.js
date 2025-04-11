@@ -7,7 +7,9 @@ const {
   INCORRECT_CREDENTIALS,
   BAD_RESET_TOKEN,
   BAD_REFRESH_TOKEN,
-  USER_NOT_FOUND
+  USER_NOT_FOUND,
+  BAD_CONFIRMATION_TOKEN,
+  EMAIL_ALREADY_CONFIRMED
 } = require('~/consts/errors')
 const emailSubject = require('~/consts/emailSubject')
 const {
@@ -34,7 +36,7 @@ const authService = {
       throw createError(401, USER_NOT_FOUND)
     }
 
-    const checkedPassword = (password === user.password) || isFromGoogle
+    const checkedPassword = password === user.password || isFromGoogle
 
     if (!checkedPassword) {
       throw createError(401, INCORRECT_CREDENTIALS)
@@ -109,6 +111,27 @@ const authService = {
     await emailService.sendEmail(email, emailSubject.SUCCESSFUL_PASSWORD_RESET, language, {
       firstName
     })
+  },
+
+  confirmEmail: async (confirmToken) => {
+    const tokenData = tokenService.validateConfirmToken(confirmToken)
+    const tokenFromDB = await tokenService.findToken(confirmToken, CONFIRM_TOKEN)
+
+    console.log(tokenData, tokenFromDB)
+
+    if (!tokenData || !tokenFromDB) {
+      throw createError(400, BAD_CONFIRMATION_TOKEN)
+    }
+
+    const { id: userId, role } = tokenData
+
+    const user = await getUserById(userId, role)
+
+    if (user.isEmailConfirmed) {
+      throw createError(400, EMAIL_ALREADY_CONFIRMED)
+    }
+
+    await privateUpdateUser(userId, { isEmailConfirmed: true })
   }
 }
 

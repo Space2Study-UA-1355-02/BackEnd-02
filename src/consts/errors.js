@@ -44,6 +44,10 @@ const errors = {
     code: 'EMAIL_NOT_CONFIRMED',
     message: 'Please confirm your email to login.'
   },
+  EMAIL_ALREADY_CONFIRMED: {
+    code: 'EMAIL_ALREADY_CONFIRMED',
+    message: 'User email has been already confirmed.'
+  },
   NOT_FOUND: {
     code: 'NOT_FOUND',
     message: 'The requested URL was not found.'
@@ -59,6 +63,10 @@ const errors = {
   BAD_REFRESH_TOKEN: {
     code: 'BAD_REFRESH_TOKEN',
     message: 'The refresh token is either invalid or has expired.'
+  },
+  BAD_CONFIRMATION_TOKEN: {
+    code: 'BAD_CONFIRMATION_TOKEN',
+    message: 'The confirmation token is either invalid or has expired.'
   },
   UNAUTHORIZED: {
     code: 'UNAUTHORIZED',
