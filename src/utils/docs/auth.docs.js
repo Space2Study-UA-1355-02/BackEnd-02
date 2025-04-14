@@ -1,0 +1,207 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Authentication and Authorization
+ */
+
+/**
+ * @swagger
+ * /signup:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Signup'
+ *     responses:
+ *       201:
+ *         description: User successfully created
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Invalid input
+ */
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: User login and receive access/refresh tokens
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Login'
+ *     responses:
+ *       200:
+ *         description: Successful login
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *             description: HTTP-only cookies with tokens
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       401:
+ *         description: Invalid credentials
+ */
+
+/**
+ * @swagger
+ * /logout:
+ *   post:
+ *     summary: Log the user out and clear tokens
+ *     tags: [Auth]
+ *     responses:
+ *       204:
+ *         description: Successfully logged out (no content)
+ */
+
+/**
+ * @swagger
+ * /refresh:
+ *   get:
+ *     summary: Refresh access and refresh tokens
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Tokens successfully refreshed
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *             description: New cookies with access/refresh tokens
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       401:
+ *         description: Missing or invalid refresh token
+ */
+
+/**
+ * @swagger
+ * /forgot-password:
+ *   post:
+ *     summary: Send password reset email
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ForgotPassword'
+ *     responses:
+ *       204:
+ *         description: Reset email sent successfully (no content)
+ */
+
+/**
+ * @swagger
+ * /reset-password/{token}:
+ *   patch:
+ *     summary: Update password using reset token
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: token
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Password reset token
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ResetPassword'
+ *     responses:
+ *       204:
+ *         description: Password successfully updated (no content)
+ *       400:
+ *         description: Invalid or expired token
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Signup:
+ *       type: object
+ *       required:
+ *         - role
+ *         - firstName
+ *         - lastName
+ *         - email
+ *         - password
+ *       properties:
+ *         role:
+ *           type: string
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+
+ *     Login:
+ *       type: object
+ *       required:
+ *         - email
+ *         - password
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *         password:
+ *           type: string
+
+ *     ForgotPassword:
+ *       type: object
+ *       required:
+ *         - email
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+
+ *     ResetPassword:
+ *       type: object
+ *       required:
+ *         - password
+ *       properties:
+ *         password:
+ *           type: string
+
+ *     AuthResponse:
+ *       type: object
+ *       properties:
+ *         accessToken:
+ *           type: string
+ *         user:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: string
+ *             email:
+ *               type: string
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             role:
+ *               type: string
+ */

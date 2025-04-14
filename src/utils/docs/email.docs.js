@@ -1,0 +1,50 @@
+/**
+ * @swagger
+ * tags:
+ *   name: Email
+ *   description: Email management and templates
+ */
+
+/**
+ * @swagger
+ * /email:
+ *   post:
+ *     summary: Send a templated and localized email
+ *     tags: [Email]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SendEmail'
+ *     responses:
+ *       204:
+ *         description: Email sent successfully (no content)
+ *       404:
+ *         description: Template not found
+ *       400:
+ *         description: Bad request or invalid input
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SendEmail:
+ *       type: object
+ *       required:
+ *         - email
+ *         - subject
+ *         - text
+ *       properties:
+ *         email:
+ *           type: string
+ *           format: email
+ *           description: Recipient's email address
+ *         subject:
+ *           type: string
+ *           description: Key that matches a predefined email template
+ *         text:
+ *           type: object
+ *           description: Dynamic data used in the email template (e.g., name, reset link)
+ */
