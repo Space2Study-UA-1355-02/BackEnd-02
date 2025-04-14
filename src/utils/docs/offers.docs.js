@@ -9,47 +9,37 @@
  * @swagger
  * /offers:
  *   get:
- *     summary: Get a list of offers with filters and aggregation
+ *     summary: Get a list of offers using aggregation pipeline
  *     tags: [Offers]
  *     parameters:
  *       - in: query
- *         name: category
+ *         name: title
  *         schema:
  *           type: string
- *         description: Filter by category ID
- *       - in: query
- *         name: subject
- *         schema:
- *           type: string
- *         description: Filter by subject ID
- *       - in: query
- *         name: priceFrom
- *         schema:
- *           type: number
- *         description: Minimum price
- *       - in: query
- *         name: priceTo
- *         schema:
- *           type: number
- *         description: Maximum price
+ *         description: Filter by title
  *       - in: query
  *         name: languages
  *         schema:
  *           type: string
- *         description: Filter by language
+ *         description: Comma-separated languages to filter
  *       - in: query
- *         name: search
+ *         name: category
  *         schema:
  *           type: string
- *         description: Full-text search
+ *         description: Category ID
+ *       - in: query
+ *         name: subject
+ *         schema:
+ *           type: string
+ *         description: Subject ID
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *         description: Sorting field and direction (e.g., "price:asc")
+ *         description: Sorting (e.g. "price:asc")
  *     responses:
  *       200:
- *         description: List of offers with filters applied
+ *         description: List of offers
  *         content:
  *           application/json:
  *             schema:
@@ -67,7 +57,7 @@
  * @swagger
  * /offers/{id}:
  *   get:
- *     summary: Get offer details by ID
+ *     summary: Get offer by ID
  *     tags: [Offers]
  *     parameters:
  *       - in: path
@@ -78,7 +68,7 @@
  *         description: Offer ID
  *     responses:
  *       200:
- *         description: Offer found
+ *         description: Offer details
  *         content:
  *           application/json:
  *             schema:
@@ -99,7 +89,7 @@
  *             $ref: '#/components/schemas/OfferInput'
  *     responses:
  *       201:
- *         description: Offer created
+ *         description: Offer created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -110,7 +100,7 @@
  * @swagger
  * /offers/{id}:
  *   put:
- *     summary: Update an existing offer
+ *     summary: Update an offer
  *     tags: [Offers]
  *     parameters:
  *       - in: path
@@ -127,7 +117,7 @@
  *             $ref: '#/components/schemas/OfferInput'
  *     responses:
  *       204:
- *         description: Offer updated
+ *         description: Offer updated successfully
  */
 
 /**
@@ -145,7 +135,7 @@
  *         description: Offer ID
  *     responses:
  *       204:
- *         description: Offer deleted
+ *         description: Offer deleted successfully
  */
 
 /**
@@ -157,6 +147,21 @@
  *       properties:
  *         _id:
  *           type: string
+ *         price:
+ *           type: number
+ *         proficiencyLevel:
+ *           type: string
+ *           enum: [beginner, intermediate, advanced] # Приклад
+ *         title:
+ *           type: string
+ *         description:
+ *           type: string
+ *         languages:
+ *           type: array
+ *           items:
+ *             type: string
+ *         authorRole:
+ *           type: string
  *         author:
  *           type: object
  *           properties:
@@ -164,30 +169,18 @@
  *               type: string
  *             lastName:
  *               type: string
- *             photo:
- *               type: string
  *             totalReviews:
- *               type: number
+ *               type: integer
  *             averageRating:
  *               type: number
+ *             photo:
+ *               type: string
  *             professionalSummary:
  *               type: string
  *             FAQ:
  *               type: array
  *               items:
- *                 type: object
- *         title:
- *           type: string
- *         description:
- *           type: string
- *         price:
- *           type: number
- *         proficiencyLevel:
- *           type: string
- *         languages:
- *           type: array
- *           items:
- *             type: string
+ *                 $ref: '#/components/schemas/FAQItem'
  *         subject:
  *           type: object
  *           properties:
@@ -206,29 +199,30 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
+
  *     OfferInput:
  *       type: object
  *       required:
  *         - title
- *         - description
  *         - price
- *         - proficiencyLevel
+ *         - description
  *         - languages
  *         - subject
  *         - category
+ *         - status
  *       properties:
  *         title:
  *           type: string
- *         description:
- *           type: string
  *         price:
  *           type: number
- *         proficiencyLevel:
+ *         description:
  *           type: string
  *         languages:
  *           type: array
  *           items:
  *             type: string
+ *         proficiencyLevel:
+ *           type: string
  *         subject:
  *           type: string
  *         category:
@@ -238,5 +232,13 @@
  *         FAQ:
  *           type: array
  *           items:
- *             type: object
+ *             $ref: '#/components/schemas/FAQItem'
+
+ *     FAQItem:
+ *       type: object
+ *       properties:
+ *         question:
+ *           type: string
+ *         answer:
+ *           type: string
  */

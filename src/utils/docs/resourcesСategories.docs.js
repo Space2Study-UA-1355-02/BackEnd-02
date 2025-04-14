@@ -1,8 +1,71 @@
 /**
  * @swagger
  * tags:
- *   name: ResourcesCategories
+ *   name: Resources Categories
  *   description: Endpoints for managing resource categories
+ */
+
+/**
+ * @swagger
+ * /resources-categories:
+ *   get:
+ *     summary: Get a list of resource categories created by the current user
+ *     tags: [Resources Categories]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         description: Filter by category name (regex match)
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *         description: Sort by field, e.g. "createdAt:desc"
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *         description: Number of documents to skip
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Maximum number of documents to return
+ *     responses:
+ *       200:
+ *         description: A list of resource categories
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 count:
+ *                   type: integer
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/ResourcesCategory'
+ */
+
+/**
+ * @swagger
+ * /resources-categories/names:
+ *   get:
+ *     summary: Get only the names of the resource categories created by the current user
+ *     tags: [Resources Categories]
+ *     responses:
+ *       200:
+ *         description: A list of resource category names
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
  */
 
 /**
@@ -10,7 +73,7 @@
  * /resources-categories:
  *   post:
  *     summary: Create a new resource category
- *     tags: [ResourcesCategories]
+ *     tags: [Resources Categories]
  *     requestBody:
  *       required: true
  *       content:
@@ -28,73 +91,10 @@
 
 /**
  * @swagger
- * /resources-categories:
- *   get:
- *     summary: Get a list of resource categories created by the current user
- *     tags: [ResourcesCategories]
- *     parameters:
- *       - in: query
- *         name: name
- *         schema:
- *           type: string
- *         description: Filter by category name
- *       - in: query
- *         name: sort
- *         schema:
- *           type: string
- *         description: Sorting field and order (e.g., "createdAt:desc")
- *       - in: query
- *         name: skip
- *         schema:
- *           type: integer
- *         description: Number of items to skip
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Number of items to return
- *     responses:
- *       200:
- *         description: List of categories
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 items:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/ResourcesCategory'
- *                 count:
- *                   type: integer
- */
-
-/**
- * @swagger
- * /resources-categories/names:
- *   get:
- *     summary: Get names of all resource categories created by the current user
- *     tags: [ResourcesCategories]
- *     responses:
- *       200:
- *         description: List of category names
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   name:
- *                     type: string
- */
-
-/**
- * @swagger
  * /resources-categories/{id}:
  *   put:
  *     summary: Update a resource category
- *     tags: [ResourcesCategories]
+ *     tags: [Resources Categories]
  *     parameters:
  *       - in: path
  *         name: id
@@ -118,7 +118,7 @@
  * /resources-categories/{id}:
  *   delete:
  *     summary: Delete a resource category
- *     tags: [ResourcesCategories]
+ *     tags: [Resources Categories]
  *     parameters:
  *       - in: path
  *         name: id
@@ -157,4 +157,6 @@
  *       properties:
  *         name:
  *           type: string
+ *           minLength: 1
+ *           maxLength: 50
  */

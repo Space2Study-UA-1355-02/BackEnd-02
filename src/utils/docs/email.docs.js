@@ -45,6 +45,6 @@
  *           type: string
  *           description: Key that matches a predefined email template
  *         text:
- *           type: object
+ *           type: string
  *           description: Dynamic data used in the email template (e.g., name, reset link)
  */

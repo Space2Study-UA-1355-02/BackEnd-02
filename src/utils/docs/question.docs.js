@@ -9,7 +9,7 @@
  * @swagger
  * /questions:
  *   get:
- *     summary: Get a list of questions created by the current user
+ *     summary: Get list of questions created by the current user
  *     tags: [Questions]
  *     parameters:
  *       - in: query
@@ -18,29 +18,28 @@
  *           type: string
  *         description: Filter by question title
  *       - in: query
- *         name: sort
- *         schema:
- *           type: string
- *         description: Sorting field and order (e.g., "createdAt:desc")
- *       - in: query
- *         name: skip
- *         schema:
- *           type: integer
- *         description: Number of documents to skip
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *         description: Maximum number of documents to return
- *       - in: query
  *         name: categories
  *         schema:
  *           type: array
  *           items:
  *             type: string
- *         style: form
- *         explode: true
  *         description: Filter by category IDs
+ *       - in: query
+ *         name: sort
+ *         schema:
+ *           type: string
+ *           example: "createdAt:desc"
+ *         description: Sorting option
+ *       - in: query
+ *         name: skip
+ *         schema:
+ *           type: integer
+ *           example: 0
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
  *     responses:
  *       200:
  *         description: List of user's questions
@@ -69,10 +68,10 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The question ID
+ *         description: Question ID
  *     responses:
  *       200:
- *         description: The requested question
+ *         description: Question data
  *         content:
  *           application/json:
  *             schema:
@@ -90,10 +89,10 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/QuestionInput'
+ *             $ref: '#/components/schemas/CreateQuestion'
  *     responses:
  *       201:
- *         description: Question created successfully
+ *         description: Question created
  *         content:
  *           application/json:
  *             schema:
@@ -112,13 +111,13 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The question ID
+ *         description: Question ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/QuestionInput'
+ *             $ref: '#/components/schemas/UpdateQuestion'
  *     responses:
  *       200:
  *         description: Updated question
@@ -140,10 +139,10 @@
  *         required: true
  *         schema:
  *           type: string
- *         description: The question ID
+ *         description: Question ID
  *     responses:
  *       204:
- *         description: Question deleted successfully
+ *         description: Question deleted
  */
 
 /**
@@ -162,7 +161,12 @@
  *         answers:
  *           type: array
  *           items:
- *             type: string
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *               isCorrect:
+ *                 type: boolean
  *         type:
  *           type: string
  *         category:
@@ -180,26 +184,41 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
- *     QuestionInput:
+
+ *     CreateQuestion:
  *       type: object
  *       required:
  *         - title
  *         - text
  *         - type
- *         - category
+ *         - answers
  *       properties:
  *         title:
  *           type: string
+ *           example: "What is JavaScript?"
  *         text:
  *           type: string
+ *           example: "Explain what JavaScript is and how it's used."
+ *         type:
+ *           type: string
+ *           example: "single"
+ *         category:
+ *           type: string
+ *           example: "663a4b3b379152dd11ec4f7d"
  *         answers:
  *           type: array
  *           items:
- *             type: string
- *         type:
- *           type: string
- *           example: "multiple-choice"
- *         category:
- *           type: string
- *           description: Category ID
+ *             type: object
+ *             required: [text]
+ *             properties:
+ *               text:
+ *                 type: string
+ *                 example: "A programming language"
+ *               isCorrect:
+ *                 type: boolean
+ *                 example: true
+
+ *     UpdateQuestion:
+ *       allOf:
+ *         - $ref: '#/components/schemas/CreateQuestion'
  */

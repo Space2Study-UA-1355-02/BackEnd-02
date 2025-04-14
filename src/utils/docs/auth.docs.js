@@ -7,10 +7,11 @@
 
 /**
  * @swagger
- * /signup:
+ * /auth/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Auth]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -23,9 +24,13 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               $ref: '#/components/schemas/SingUpResponse'
  *       400:
- *         description: Invalid input
+ *         description: Invalid language
+ *       422:
+ *         description: invalid input
+ *       409:
+ *         description: validation error
  */
 
 /**
@@ -34,6 +39,7 @@
  *   post:
  *     summary: User login and receive access/refresh tokens
  *     tags: [Auth]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -51,9 +57,13 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               $ref: '#/components/schemas/LoginResponse'
  *       401:
  *         description: Invalid credentials
+ *       422:
+ *         description: invalid input
+ *       409:
+ *         description: validation error
  */
 
 /**
@@ -62,6 +72,7 @@
  *   post:
  *     summary: Log the user out and clear tokens
  *     tags: [Auth]
+ *     security: []
  *     responses:
  *       204:
  *         description: Successfully logged out (no content)
@@ -73,6 +84,7 @@
  *   get:
  *     summary: Refresh access and refresh tokens
  *     tags: [Auth]
+ *     security: []
  *     responses:
  *       200:
  *         description: Tokens successfully refreshed
@@ -84,7 +96,7 @@
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               $ref: '#/components/schemas/LoginResponse'
  *       401:
  *         description: Missing or invalid refresh token
  */
@@ -95,6 +107,7 @@
  *   post:
  *     summary: Send password reset email
  *     tags: [Auth]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -112,6 +125,7 @@
  *   patch:
  *     summary: Update password using reset token
  *     tags: [Auth]
+ *     security: []
  *     parameters:
  *       - in: path
  *         name: token
@@ -186,22 +200,17 @@
  *         password:
  *           type: string
 
- *     AuthResponse:
+ *     LoginResponse:
  *       type: object
  *       properties:
  *         accessToken:
  *           type: string
- *         user:
- *           type: object
- *           properties:
- *             id:
- *               type: string
- *             email:
- *               type: string
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             role:
- *               type: string
+
+ *     SingUpResponse:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: string
+ *         userEmail:
+ *           type: string
  */

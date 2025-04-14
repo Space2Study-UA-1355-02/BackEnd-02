@@ -2,39 +2,39 @@
  * @swagger
  * tags:
  *   name: Users
- *   description: User management operations
+ *   description: User management
  */
 
 /**
  * @swagger
  * /users:
  *   get:
- *     summary: Get a list of users with pagination, filtering and sorting
+ *     summary: Get a paginated list of users
  *     tags: [Users]
  *     parameters:
  *       - in: query
  *         name: skip
  *         schema:
  *           type: integer
+ *           minimum: 0
  *         description: Number of items to skip
  *       - in: query
  *         name: limit
  *         schema:
  *           type: integer
- *         description: Number of items to return
+ *           minimum: 1
+ *         description: Maximum number of items to return
  *       - in: query
  *         name: sort
  *         schema:
  *           type: string
- *         description: Sort parameters (e.g., "firstName:asc")
+ *         description: Sorting string (e.g. "email,-createdAt")
  *       - in: query
- *         name: match
- *         schema:
- *           type: object
- *         description: MongoDB-style filter conditions
+ *         name: [field names]
+ *         description: Filter by any user field
  *     responses:
  *       200:
- *         description: List of users and total count
+ *         description: A list of users
  *         content:
  *           application/json:
  *             schema:
@@ -52,7 +52,7 @@
  * @swagger
  * /users/{id}:
  *   get:
- *     summary: Get user by ID
+ *     summary: Get a user by ID
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -65,10 +65,10 @@
  *         name: role
  *         schema:
  *           type: string
- *         description: Filter user by role
+ *         description: Optional role to filter by
  *     responses:
  *       200:
- *         description: User object
+ *         description: User found
  *         content:
  *           application/json:
  *             schema:
@@ -80,11 +80,9 @@
 /**
  * @swagger
  * /users/{id}:
- *   patch:
- *     summary: Update user by ID
+ *   put:
+ *     summary: Update user data (self only)
  *     tags: [Users]
- *     security:
- *       - cookieAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -97,21 +95,21 @@
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateUser'
+ *             $ref: '#/components/schemas/UserUpdate'
  *     responses:
  *       204:
- *         description: User updated successfully
+ *         description: Successfully updated
  *       403:
- *         description: Forbidden - trying to update another user
+ *         description: Forbidden (can only update your own data)
  *       404:
  *         description: User not found
  */
 
 /**
  * @swagger
- * /users/status/{id}:
+ * /users/{id}/status:
  *   patch:
- *     summary: Update status of a user by ID
+ *     summary: Update user status
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -127,11 +125,11 @@
  *           schema:
  *             type: object
  *             example:
- *               teacher: "active"
- *               student: "inactive"
+ *               student: "active"
+ *               tutor: "inactive"
  *     responses:
  *       204:
- *         description: Status updated successfully
+ *         description: Status updated
  *       404:
  *         description: User not found
  */
@@ -140,7 +138,7 @@
  * @swagger
  * /users/{id}:
  *   delete:
- *     summary: Delete user by ID
+ *     summary: Delete a user by ID
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -151,7 +149,7 @@
  *         description: User ID
  *     responses:
  *       204:
- *         description: User deleted successfully
+ *         description: Successfully deleted
  *       404:
  *         description: User not found
  */
@@ -165,28 +163,93 @@
  *       properties:
  *         _id:
  *           type: string
- *         email:
- *           type: string
+ *         role:
+ *           type: array
+ *           items:
+ *             type: string
  *         firstName:
  *           type: string
  *         lastName:
  *           type: string
- *         role:
+ *         email:
+ *           type: string
+ *         address:
+ *           type: object
+ *           properties:
+ *             country:
+ *               type: string
+ *             city:
+ *               type: string
+ *         photo:
+ *           type: string
+ *         professionalSummary:
+ *           type: string
+ *         mainSubjects:
+ *           type: object
+ *           properties:
+ *             student:
+ *               type: array
+ *               items:
+ *                 type: string
+ *             tutor:
+ *               type: array
+ *               items:
+ *                 type: string
+ *         totalReviews:
+ *           type: object
+ *           properties:
+ *             student:
+ *               type: number
+ *             tutor:
+ *               type: number
+ *         averageRating:
+ *           type: object
+ *           properties:
+ *             student:
+ *               type: number
+ *             tutor:
+ *               type: number
+ *         nativeLanguage:
  *           type: string
  *         status:
  *           type: object
- *         lastLoginAs:
+ *           properties:
+ *             student:
+ *               type: string
+ *             tutor:
+ *               type: string
+ *             admin:
+ *               type: string
+ *         lastLogin:
  *           type: string
- *         isEmailConfirmed:
- *           type: boolean
- *         isFirstLogin:
- *           type: boolean
+ *           format: date-time
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
  *
- *     UpdateUser:
+ *     UserUpdate:
  *       type: object
- *       example:
- *         firstName: "John"
- *         lastName: "Doe"
+ *       properties:
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         address:
+ *           type: object
+ *           properties:
+ *             country:
+ *               type: string
+ *             city:
+ *               type: string
+ *         photo:
+ *           type: string
+ *         professionalSummary:
+ *           type: string
  *         mainSubjects:
- *           student: ["Math", "Science"]
+ *           type: array
+ *           items:
+ *             type: string
  */

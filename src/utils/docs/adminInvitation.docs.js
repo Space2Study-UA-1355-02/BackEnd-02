@@ -64,6 +64,9 @@
  *           type: string
  *         email:
  *           type: string
+ *         dateOfInvitation:
+ *           type: string
+ *           format: date-time
  *         createdAt:
  *           type: string
  *           format: date-time
