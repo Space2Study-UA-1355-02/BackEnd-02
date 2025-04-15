@@ -6,7 +6,7 @@ const {
 } = require('~/configs/config')
 const { createError } = require('~/utils/errorsHelper')
 const { TEMPLATE_NOT_FOUND } = require('~/consts/errors')
-const path = require('node:path')
+const path = require('path')
 
 const emailTemplates = new EmailTemplates({
   views: {
