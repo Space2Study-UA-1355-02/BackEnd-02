@@ -23,6 +23,10 @@ jest.mock('~/services/email', () => ({
 let mockedUsersList
 
 describe('checkForLastUserLogin cron-job', () => {
+  Object.defineProperty(global, 'performance', {
+    writable: true
+  })
+
   beforeEach(() => {
     mockedUsersList = { items: [{ ...mockedUser, lastLogin: mockedLastLoginDateToSendEmail }] }
     userService.getUsers = jest.fn(() => mockedUsersList)
