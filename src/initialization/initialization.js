@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const swaggerJsdoc = require('swagger-jsdoc')
+const swaggerUi = require('swagger-ui-express')
 
 const {
   config: { CLIENT_URL }
@@ -8,6 +10,8 @@ const {
 const router = require('~/routes')
 const { createNotFoundError } = require('~/utils/errorsHelper')
 const errorMiddleware = require('~/middlewares/error')
+const swaggerOptions = require('~/utils/docs/swaggerOptions')
+const swaggerSpec = swaggerJsdoc(swaggerOptions)
 
 const initialization = (app) => {
   app.use(express.json({ limit: '10mb' }))
@@ -21,6 +25,8 @@ const initialization = (app) => {
       allowedHeaders: 'Content-Type, Authorization'
     })
   )
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
   app.use('/', router)
 

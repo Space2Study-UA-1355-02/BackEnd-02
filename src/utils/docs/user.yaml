@@ -1,0 +1,233 @@
+tags:
+  - name: Users
+    description: User management
+
+paths:
+  /users:
+    get:
+      summary: Get a paginated list of users
+      tags: [ Users ]
+      parameters:
+        - in: query
+          name: skip
+          schema:
+            type: integer
+            minimum: 0
+          description: Number of items to skip
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+          description: Maximum number of items to return
+        - in: query
+          name: sort
+          schema:
+            type: string
+          description: Sorting string (e.g. "email,-createdAt")
+        - in: query
+          name: [ field names ]
+          description: Filter by any user field
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  count:
+                    type: integer
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      tags: [ Users ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+        - in: query
+          name: role
+          schema:
+            type: string
+          description: Optional role to filter by
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+
+    put:
+      summary: Update user data (self only)
+      tags: [ Users ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdate'
+      responses:
+        '204':
+          description: Successfully updated
+        '403':
+          description: Forbidden (can only update your own data)
+        '404':
+          description: User not found
+
+    delete:
+      summary: Delete a user by ID
+      tags: [ Users ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      responses:
+        '204':
+          description: Successfully deleted
+        '404':
+          description: User not found
+
+  /users/{id}/status:
+    patch:
+      summary: Update user status
+      tags: [ Users ]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: User ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                student: "active"
+                tutor: "inactive"
+      responses:
+        '204':
+          description: Status updated
+        '404':
+          description: User not found
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        role:
+          type: array
+          items:
+            type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            city:
+              type: string
+        photo:
+          type: string
+        professionalSummary:
+          type: string
+        mainSubjects:
+          type: object
+          properties:
+            student:
+              type: array
+              items:
+                type: string
+            tutor:
+              type: array
+              items:
+                type: string
+        totalReviews:
+          type: object
+          properties:
+            student:
+              type: number
+            tutor:
+              type: number
+        averageRating:
+          type: object
+          properties:
+            student:
+              type: number
+            tutor:
+              type: number
+        nativeLanguage:
+          type: string
+        status:
+          type: object
+          properties:
+            student:
+              type: string
+            tutor:
+              type: string
+            admin:
+              type: string
+        lastLogin:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UserUpdate:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        address:
+          type: object
+          properties:
+            country:
+              type: string
+            city:
+              type: string
+        photo:
+          type: string
+        professionalSummary:
+          type: string
+        mainSubjects:
+          type: array
+          items:
+            type: string
