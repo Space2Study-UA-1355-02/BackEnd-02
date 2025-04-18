@@ -1,5 +1,6 @@
 const tokenService = require('~/services/token')
 const emailService = require('~/services/email')
+const bcrypt = require('bcrypt')
 const { getUserByEmail, createUser, privateUpdateUser, getUserById } = require('~/services/user')
 const { createError } = require('~/utils/errorsHelper')
 const {
@@ -18,7 +19,8 @@ const {
 
 const authService = {
   signup: async (role, firstName, lastName, email, password, language) => {
-    const user = await createUser(role, firstName, lastName, email, password, language)
+    const hashedPassword = await authService.hashPassword(password)
+    const user = await createUser(role, firstName, lastName, email, hashedPassword, language)
 
     const confirmToken = tokenService.generateConfirmToken({ id: user._id, role })
     await tokenService.saveToken(user._id, confirmToken, CONFIRM_TOKEN)
@@ -36,7 +38,13 @@ const authService = {
       throw createError(401, USER_NOT_FOUND)
     }
 
-    const checkedPassword = isFromGoogle || password === user.password
+    let checkedPassword = false
+
+    if (isFromGoogle) {
+      checkedPassword = true
+    } else {
+      checkedPassword = await authService.checkHashedPassword(password, user.password)
+    }
 
     if (!checkedPassword) {
       throw createError(401, INCORRECT_CREDENTIALS)
@@ -137,6 +145,16 @@ const authService = {
     await privateUpdateUser(userId, { isEmailConfirmed: true })
 
     await tokenService.removeConfirmToken(confirmToken)
+  },
+
+  hashPassword: async (password) => {
+    const saltRounds = 10
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
+    return hashedPassword
+  },
+
+  checkHashedPassword: async (passwordToCheck, userPassword) => {
+    return await bcrypt.compare(passwordToCheck, userPassword)
   }
 }
 
