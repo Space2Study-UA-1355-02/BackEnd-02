@@ -1,0 +1,132 @@
+tags:
+  - name: Locations
+    description: Locations management and templates
+
+paths:
+  /locations/countries:
+    get:
+      summary: Retrieve a list of countries with search functionality
+      description: Returns a list of countries with pagination and search functionality based on the first letters of the country name.
+      tags: [ Locations ]
+      parameters:
+        - name: limit
+          in: query
+          description: The number of countries to return
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          description: The offset for pagination
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: search
+          in: query
+          description: A search string to filter countries by their name
+          required: false
+          schema:
+            type: string
+            example: "fr"
+      responses:
+        '200':
+          description: List of countries
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      countries:
+                        type: array
+                        items:
+                          type: string
+                        description: List of countries matching the search query
+                      total:
+                        type: integer
+                        description: Total number of countries
+                      limit:
+                        type: integer
+                        description: The number of countries returned in the current request
+                      offset:
+                        type: integer
+                        description: The offset used for pagination
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+  /locations/cities:
+    get:
+      summary: Retrieve a list of cities for a specified country with search functionality
+      description: Returns a list of cities for a given country with pagination and search functionality based on the first letters of the city name.
+      tags: [ Locations ]
+      parameters:
+        - name: country
+          in: query
+          description: The name of the country for which cities are to be fetched
+          required: true
+          schema:
+            type: string
+            example: "Germany"
+        - name: limit
+          in: query
+          description: The number of cities to return
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: offset
+          in: query
+          description: The offset for pagination
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: search
+          in: query
+          description: A search string to filter cities by their name
+          required: false
+          schema:
+            type: string
+            example: "ber"
+      responses:
+        '200':
+          description: List of cities for the specified country
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      countries:
+                        type: array
+                        items:
+                          type: string
+                        description: List of countries for which cities are retrieved
+                      cities:
+                        type: array
+                        items:
+                          type: string
+                        description: List of cities matching the search query
+                      total:
+                        type: integer
+                        description: Total number of cities
+                      limit:
+                        type: integer
+                        description: The number of cities returned in the current request
+                      offset:
+                        type: integer
+                        description: The offset used for pagination
+        '400':
+          description: Bad request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal server error
