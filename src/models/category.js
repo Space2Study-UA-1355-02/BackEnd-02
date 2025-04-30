@@ -9,7 +9,7 @@ const {
 } = require('~/consts/errors')
 const { CATEGORY } = require('~/consts/models')
 const {
-  regex: { HEX_COLOR_CODE_PATTERN, NAME_PATTERN }
+  regex: { HEX_COLOR_CODE_PATTERN }
 } = require('~/consts/validation')
 
 const categorySchema = new Schema({
@@ -17,7 +17,6 @@ const categorySchema = new Schema({
     type: String,
     required: [true, FIELD_CANNOT_BE_EMPTY('name')],
     unique: [true, DOCUMENT_ALREADY_EXISTS('name')],
-    regex: NAME_PATTERN,
     minLength: [1, FIELD_CANNOT_BE_SHORTER('name', 1)],
     maxLength: [150, FIELD_CANNOT_BE_LONGER('name', 150)]
   },
