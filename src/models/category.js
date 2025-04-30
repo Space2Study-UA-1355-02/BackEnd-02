@@ -17,7 +17,7 @@ const categorySchema = new Schema({
     minLength: [1, FIELD_CANNOT_BE_SHORTER('name', 1)],
     maxLength: [150, FIELD_CANNOT_BE_LONGER('name', 150)]
   },
-  Appearance: {
+  appearance: {
     icon: {
       type: String,
       required: [true, FIELD_CANNOT_BE_EMPTY('icon')],
