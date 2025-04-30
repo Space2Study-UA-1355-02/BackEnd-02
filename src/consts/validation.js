@@ -8,7 +8,8 @@ const lengths = {
 const regex = {
   EMAIL_PATTERN: /^([a-z\d]+([._-][a-z\d]+)*)@([a-z\d]+([.-][a-z\d]+)*\.[a-z]{2,})$/i,
   PASSWORD_PATTERN: /^(?=.*\d)(?=.*[a-zа-яєії])\S+$/i,
-  NAME_PATTERN: /^[a-zа-яєії]+$/i
+  NAME_PATTERN: /^[a-zа-яєії]+$/i,
+  HEX_COLOR_CODE_PATTERN: /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/i
 }
 
 const enums = {
