@@ -1,12 +1,12 @@
 tags:
-  - name: Categories
+  - name: Category
     description: Endpoints for managing categories
 
 paths:
   /categories:
     post:
       tags:
-        - Categories
+        - Category
       summary: Create a new category
       description: Allows an admin to create a new category.
       security:
@@ -44,6 +44,80 @@ paths:
           description: Forbidden – admin role required
         '409':
           description: Category with the same name already exists
+
+  /categories/names:
+    get:
+      tags:
+        - Category
+      summary: Get list of category names
+      description: Returns a list of category names with optional filters like pagination, sorting, and name search.
+      security:
+        - bearerAuth: [ ]
+        - cookieAuth: [ ]
+      parameters:
+        - name: limit
+          in: query
+          description: Number of results to return
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - name: skip
+          in: query
+          description: Number of results to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+        - name: sort[orderBy]
+          in: query
+          description: Field to sort by (e.g. name)
+          required: false
+          schema:
+            type: string
+        - name: sort[order]
+          in: query
+          description: Sort order (asc or desc)
+          required: false
+          schema:
+            type: string
+            enum: [ asc, desc ]
+        - name: categories
+          in: query
+          description: Comma-separated list of category IDs to filter
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          description: Partial match on category name
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of category names retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categoriesNames:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: Unique category ID
+                          example: 60d21b4667d0d8992e610c85
+                        name:
+                          type: string
+                          description: Category name
+                          example: "Language"
+        '401':
+          description: Unauthorized – authentication required
+
 
 components:
   securitySchemes:

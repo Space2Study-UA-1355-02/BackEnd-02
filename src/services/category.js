@@ -23,6 +23,14 @@ const categoryService = {
         color
       }
     })
+  },
+
+  getCategoryNames: async (limit, skip, sortOptions, categories, name) => {
+    const query = {}
+    if (categories) query._id = { $in: categories }
+    if (name) query.name = { $regex: name, $options: 'i' }
+
+    return await Category.find(query, 'name').sort(sortOptions).skip(skip).limit(limit)
   }
 }
 
