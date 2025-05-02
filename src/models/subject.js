@@ -1,5 +1,5 @@
 const { Schema, model, Types } = require('mongoose')
-const { RESOURCES_CATEGORY } = require('~/consts/models')
+const { CATEGORY, SUBJECT } = require('~/consts/models')
 const { FIELD_CANNOT_BE_EMPTY } = require('~/consts/errors')
 
 const subjectSchema = new Schema(
@@ -10,7 +10,7 @@ const subjectSchema = new Schema(
     },
     category: {
       type: Types.ObjectId,
-      ref: RESOURCES_CATEGORY,
+      ref: CATEGORY,
       required: [true, FIELD_CANNOT_BE_EMPTY('category')]
     },
     totalOffers: {
@@ -21,4 +21,4 @@ const subjectSchema = new Schema(
   { timestamps: true, versionKey: false }
 )
 
-module.exports = model('Subject', subjectSchema)
+module.exports = model(SUBJECT, subjectSchema)
