@@ -2,19 +2,85 @@ tags:
   - name: Subject
     description: Endpoints for managing subjects
 
-
 paths:
+  /subjects:
+    get:
+      summary: Get a list of subjects
+      tags: [Subject]
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+          description: Number of items to return
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+          description: Number of items to skip
+        - name: search
+          in: query
+          schema:
+            type: string
+          description: Search term to filter subjects by name
+      responses:
+        '200':
+          description: A list of subjects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      countries:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Subject'
+                      total:
+                        type: integer
+                      limit:
+                        type: integer
+                      offset:
+                        type: integer
+
+    post:
+      summary: Create a new subject
+      tags: [Subject]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, categoryId]
+              properties:
+                name:
+                  type: string
+                categoryId:
+                  type: string
+      responses:
+        '201':
+          description: Subject created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+
   /subjects/{id}:
     get:
-      summary: get subject by id
+      summary: Get subject by ID
       tags: [Subject]
       parameters:
         - name: id
           in: path
           required: true
-          description: subject id
           schema:
             type: string
+          description: Subject ID
       responses:
         '200':
           description: Success
@@ -24,3 +90,55 @@ paths:
                 $ref: '#/components/schemas/Subject'
         '404':
           description: Subject was not found
+
+    put:
+      summary: Update subject by ID
+      tags: [Subject]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Subject ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Fields to update (filtered internally)
+              additionalProperties: true
+      responses:
+        '204':
+          description: Subject updated successfully
+        '404':
+          description: Subject not found
+
+    delete:
+      summary: Delete subject by ID
+      tags: [Subject]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Subject ID
+      responses:
+        '204':
+          description: Subject deleted successfully
+        '404':
+          description: Subject not found
+
+components:
+  schemas:
+    Subject:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        category:
+          type: string

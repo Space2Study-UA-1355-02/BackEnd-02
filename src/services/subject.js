@@ -29,7 +29,7 @@ const subjectService = {
 
     return {
       data: {
-        countries: paginate(filteredSubjects, paginationLimit, paginationOffset),
+        subjects: paginate(filteredSubjects, paginationLimit, paginationOffset),
         total: subjects.length,
         limit: limit,
         offset: offset || 0
