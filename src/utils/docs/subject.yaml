@@ -1,0 +1,26 @@
+tags:
+  - name: Subject
+    description: Endpoints for managing subjects
+
+
+paths:
+  /subjects/{id}:
+    get:
+      summary: get subject by id
+      tags: [Subject]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: subject id
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+        '404':
+          description: Subject was not found
