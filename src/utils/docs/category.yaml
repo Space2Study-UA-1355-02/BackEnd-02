@@ -1,12 +1,12 @@
 tags:
-  - name: Categories
+  - name: Category
     description: Endpoints for managing categories
 
 paths:
   /categories:
     post:
       tags:
-        - Categories
+        - Category
       summary: Create a new category
       description: Allows an admin to create a new category.
       security:
@@ -44,6 +44,37 @@ paths:
           description: Forbidden – admin role required
         '409':
           description: Category with the same name already exists
+
+  /categories/{id}:
+    get:
+      tags:
+        - Category
+      summary: Get category by ID
+      description: Returns a category by its unique ID.
+      security:
+        - bearerAuth: [ ]
+        - cookieAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the category to retrieve
+          schema:
+            type: string
+            example: 60d21b4667d0d8992e610c85
+      responses:
+        '200':
+          description: Successfully retrieved the category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid ID format
+        '401':
+          description: Unauthorized – authentication required
+        '404':
+          description: Category not found
 
 components:
   securitySchemes:
