@@ -10,6 +10,7 @@ const {
 } = require('~/consts/auth')
 
 router.use(authMiddleware)
+router.get('/:id', asyncWrapper(categoryController.getCategoryById))
 
 router.use(restrictTo(ADMIN))
 router.post('/', asyncWrapper(categoryController.createCategory))
