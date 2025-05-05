@@ -9,6 +9,10 @@ const {
 } = require('~/consts/errors')
 const { CATEGORY } = require('~/consts/models')
 
+const {
+  regex: { HEX_COLOR_CODE_PATTERN }
+} = require('~/consts/validation')
+
 const categorySchema = new Schema({
   name: {
     type: String,

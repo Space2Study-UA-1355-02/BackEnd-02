@@ -2,6 +2,60 @@ tags:
   - name: Categories
     description: Endpoints for managing categories
 
+paths:
+  /categories:
+    post:
+      tags:
+        - Categories
+      summary: Create a new category
+      description: Allows an admin to create a new category.
+      security:
+        - bearerAuth: [ ]
+        - cookieAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - appearance
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 150
+                  example: "Language"
+                appearance:
+                  $ref: '#/components/schemas/CategoryAppearance'
+      responses:
+        '201':
+          description: Category successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid request payload
+        '401':
+          description: Unauthorized – authentication required
+        '403':
+          description: Forbidden – admin role required
+        '409':
+          description: Category with the same name already exists
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: accessToken
+
 components:
   schemas:
     CategoryAppearance:
@@ -32,8 +86,8 @@ components:
           minLength: 1
           maxLength: 150
           example: "Language"
-        Appearance:
+        appearance:
           $ref: '#/components/schemas/CategoryAppearance'
       required:
         - name
-        - Appearance
+        - appearance
