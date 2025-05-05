@@ -55,6 +55,8 @@ components:
       type: apiKey
       in: cookie
       name: accessToken
+
+components:
   schemas:
     CategoryAppearance:
       type: object
