@@ -23,6 +23,7 @@ const categoryService = {
         color
       }
     })
+
   },
 
   getCategories: async (limit, skip, sort, categories, name) => {
