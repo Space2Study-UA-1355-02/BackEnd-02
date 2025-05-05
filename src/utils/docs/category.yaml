@@ -1,0 +1,39 @@
+tags:
+  - name: Categories
+    description: Endpoints for managing categories
+
+components:
+  schemas:
+    CategoryAppearance:
+      type: object
+      properties:
+        icon:
+          type: string
+          description: Category icon
+          example: Language
+        color:
+          type: string
+          description: Category color
+          example: '#66C42C'
+      required:
+        - icon
+        - color
+
+    Category:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique category identifier
+          example: 60d21b4667d0d8992e610c85
+        name:
+          type: string
+          description: Category name
+          minLength: 1
+          maxLength: 150
+          example: "Language"
+        Appearance:
+          $ref: '#/components/schemas/CategoryAppearance'
+      required:
+        - name
+        - Appearance

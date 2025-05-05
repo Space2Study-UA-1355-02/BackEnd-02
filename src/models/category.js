@@ -1,0 +1,34 @@
+const { Schema, model } = require('mongoose')
+
+const { DEFAULT_CATEGORY_ICON, DEFAULT_CATEGORY_ICON_COLOR } = require('~/consts/category')
+const {
+  FIELD_CANNOT_BE_EMPTY,
+  DOCUMENT_ALREADY_EXISTS,
+  FIELD_CANNOT_BE_SHORTER,
+  FIELD_CANNOT_BE_LONGER
+} = require('~/consts/errors')
+const { CATEGORY } = require('~/consts/models')
+
+const categorySchema = new Schema({
+  name: {
+    type: String,
+    required: [true, FIELD_CANNOT_BE_EMPTY('name')],
+    unique: [true, DOCUMENT_ALREADY_EXISTS('name')],
+    minLength: [1, FIELD_CANNOT_BE_SHORTER('name', 1)],
+    maxLength: [100, FIELD_CANNOT_BE_LONGER('name', 100)]
+  },
+  appearance: {
+    icon: {
+      type: String,
+      required: [true, FIELD_CANNOT_BE_EMPTY('icon')],
+      default: DEFAULT_CATEGORY_ICON
+    },
+    color: {
+      type: String,
+      required: [true, FIELD_CANNOT_BE_EMPTY('color')],
+      default: DEFAULT_CATEGORY_ICON_COLOR
+    }
+  }
+})
+
+module.exports = model(CATEGORY, categorySchema)
