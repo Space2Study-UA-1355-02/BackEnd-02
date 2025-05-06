@@ -9,7 +9,7 @@ const {
   BAD_RESET_TOKEN,
   BAD_REFRESH_TOKEN,
   USER_NOT_FOUND,
-  BAD_CONFIRMATION_TOKEN,
+  BAD_CONFIRM_TOKEN,
   EMAIL_ALREADY_CONFIRMED
 } = require('~/consts/errors')
 const emailSubject = require('~/consts/emailSubject')
@@ -125,21 +125,21 @@ const authService = {
     const tokenData = tokenService.validateConfirmToken(confirmToken)
 
     if (!tokenData) {
-      throw createError(400, BAD_CONFIRMATION_TOKEN)
+      throw createError(400, BAD_CONFIRM_TOKEN)
     }
 
     const { id: userId, role } = tokenData
 
     const user = await getUserById(userId, role)
 
-    if (user.isEmailConfirmed) {
-      throw createError(400, EMAIL_ALREADY_CONFIRMED)
+    if (user && user.isEmailConfirmed) {
+      throw createError(409, EMAIL_ALREADY_CONFIRMED)
     }
 
     const tokenFromDB = await tokenService.findToken(confirmToken, CONFIRM_TOKEN)
 
     if (!tokenFromDB) {
-      throw createError(400, BAD_CONFIRMATION_TOKEN)
+      throw createError(404, BAD_CONFIRM_TOKEN)
     }
 
     await privateUpdateUser(userId, { isEmailConfirmed: true })
