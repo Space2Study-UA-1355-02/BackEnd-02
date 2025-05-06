@@ -64,8 +64,8 @@ const errors = {
     code: 'BAD_REFRESH_TOKEN',
     message: 'The refresh token is either invalid or has expired.'
   },
-  BAD_CONFIRMATION_TOKEN: {
-    code: 'BAD_CONFIRMATION_TOKEN',
+  BAD_CONFIRM_TOKEN: {
+    code: 'BAD_CONFIRM_TOKEN',
     message: 'The confirmation token is either invalid or has expired.'
   },
   UNAUTHORIZED: {
