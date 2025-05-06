@@ -8,7 +8,6 @@ const {
   FIELD_CANNOT_BE_LONGER
 } = require('~/consts/errors')
 const { CATEGORY } = require('~/consts/models')
-
 const {
   regex: { HEX_COLOR_CODE_PATTERN }
 } = require('~/consts/validation')
