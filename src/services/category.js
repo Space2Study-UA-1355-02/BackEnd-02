@@ -1,4 +1,5 @@
 const Category = require('~/models/category')
+
 const { createError } = require('~/utils/errorsHelper')
 
 const { DOCUMENT_ALREADY_EXISTS } = require('~/consts/errors')
@@ -24,6 +25,10 @@ const categoryService = {
       }
     })
   },
+  
+  getCategoryById: async (id) => {
+    return await Category.findById(id)
+  }
 
   getCategoryNames: async (limit, skip, sortOptions, categories, name) => {
     const query = {}

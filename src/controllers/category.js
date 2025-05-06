@@ -1,6 +1,12 @@
+
+const mongoose = require('mongoose')
+
 const categoryService = require('~/services/category')
 
+const { createBadRequestError, createNotFoundError } = require('~/utils/errorsHelper')
+
 const { DEFAULT_CATEGORY_LIMIT, DEFAULT_CATEGORY_SKIP } = require('~/consts/category')
+
 
 const createCategory = async (req, res) => {
   const categoryData = req.body
@@ -8,6 +14,22 @@ const createCategory = async (req, res) => {
   const newCategory = await categoryService.createCategory(categoryData)
 
   res.status(201).json(newCategory)
+}
+
+const getCategoryById = async (req, res) => {
+  const id = req.params.id
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    throw createBadRequestError()
+  }
+
+  const category = await categoryService.getCategoryById(id)
+
+  if (!category) {
+    throw createNotFoundError()
+  }
+
+  res.status(200).json(category)
 }
 
 const getCategoryNames = async (req, res) => {
@@ -41,6 +63,7 @@ const getCategories = async (req, res) => {
 
 module.exports = {
   createCategory,
+  getCategories,
   getCategoryNames,
-  getCategories
+  getCategoryById
 }

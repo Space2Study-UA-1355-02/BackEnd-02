@@ -109,6 +109,37 @@ paths:
         '401':
           description: Unauthorized – authentication required
 
+  /categories/{id}:
+    get:
+      tags:
+        - Category
+      summary: Get category by ID
+      description: Returns a category by its unique ID.
+      security:
+        - bearerAuth: [ ]
+        - cookieAuth: [ ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the category to retrieve
+          schema:
+            type: string
+            example: 60d21b4667d0d8992e610c85
+      responses:
+        '200':
+          description: Successfully retrieved the category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Invalid ID format
+        '401':
+          description: Unauthorized – authentication required
+        '404':
+          description: Category not found
+
   /categories/names:
     get:
       tags:
@@ -182,7 +213,6 @@ paths:
         '401':
           description: Unauthorized – authentication required
 
-
 components:
   securitySchemes:
     bearerAuth:
@@ -193,6 +223,7 @@ components:
       type: apiKey
       in: cookie
       name: accessToken
+      
   schemas:
     CategoryAppearance:
       type: object
