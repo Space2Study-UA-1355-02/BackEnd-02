@@ -18,7 +18,7 @@ const getSubjects = async (req, res) => {
 const createSubject = async (req, res) => {
   const { name, categoryId } = req.body
 
-  const newSubject = await subjectService.createOffer(name, categoryId)
+  const newSubject = await subjectService.createSubject(name, categoryId)
 
   res.status(201).json(newSubject)
 }
