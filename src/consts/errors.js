@@ -52,6 +52,10 @@ const errors = {
     code: 'NOT_FOUND',
     message: 'The requested URL was not found.'
   },
+  DATA_NOT_FOUND: {
+    code: 'DATA_NOT_FOUND',
+    message: 'The requested information was not found.'
+  },
   FORBIDDEN: {
     code: 'FORBIDDEN',
     message: 'You do not have permission to perform this action.'
@@ -135,6 +139,14 @@ const errors = {
 }
 
 const validationErrors = {
+  name: {
+    code: 'NAME_NOT_VALID',
+    message: 'Name must contain only letters, spaces, and hyphens.'
+  },
+  color: {
+    code: 'COLOR_NOT_VALID',
+    message: 'Color should be of the following format: “#***” or “#******”.'
+  },
   email: {
     code: 'EMAIL_NOT_VALID',
     message: 'Email should be of the following format: “local-part@domain.com”.'
