@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose')
 
 const { DEFAULT_CATEGORY_ICON, DEFAULT_CATEGORY_ICON_COLOR } = require('~/consts/category')
+
 const {
   FIELD_CANNOT_BE_EMPTY,
   DOCUMENT_ALREADY_EXISTS,
@@ -8,9 +9,6 @@ const {
   FIELD_CANNOT_BE_LONGER
 } = require('~/consts/errors')
 const { CATEGORY } = require('~/consts/models')
-const {
-  regex: { HEX_COLOR_CODE_PATTERN }
-} = require('~/consts/validation')
 
 const categorySchema = new Schema({
   name: {

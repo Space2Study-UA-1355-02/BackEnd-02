@@ -14,7 +14,7 @@ const validateRequired = (schemaFieldKey, required, field) => {
 }
 
 const validateType = (schemaFieldKey, type, field) => {
-  if (type != typeof field) {
+  if (type !== typeof field) {
     throw createError(422, FIELD_IS_NOT_OF_PROPER_TYPE(schemaFieldKey, type))
   }
 }
