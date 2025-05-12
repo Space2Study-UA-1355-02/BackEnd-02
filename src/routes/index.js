@@ -18,7 +18,7 @@ router.use('/admin-invitations', adminInvitation)
 router.use('/questions', question)
 router.use('/resources-categories', resourcesCategory)
 router.use('/offers', offer)
-router.use('subject', subject)
+router.use('/subject', subject)
 router.use('/locations', locations)
 router.use('/categories', categories)
 
