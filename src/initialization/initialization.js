@@ -10,7 +10,7 @@ const {
 const router = require('~/routes')
 const { createNotFoundError } = require('~/utils/errorsHelper')
 const errorMiddleware = require('~/middlewares/error')
-const swaggerOptions = require('~/utils/docs/swaggerOptions')
+const swaggerOptions = require('~/../docs/swaggerOptions')
 const swaggerSpec = swaggerJsdoc(swaggerOptions)
 
 const initialization = (app) => {
