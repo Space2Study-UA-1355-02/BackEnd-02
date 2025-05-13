@@ -1,8 +1,8 @@
 const Subject = require('~/models/subject')
 const { createError } = require('~/utils/errorsHelper')
 const { NOT_FOUND } = require('~/consts/errors')
-const filterAllowedFields = require('~/src/utils/filterAllowedFields')
-const { allowedSubjectFieldsForUpdate } = require('~/src/validation/services/subject')
+const filterAllowedFields = require('~/utils/filterAllowedFields')
+const { allowedSubjectFieldsForUpdate } = require('~/validation/services/subject')
 const { paginate } = require('~/utils/paginate')
 const { filterBySearch } = require('~/utils/filterBySearch')
 
@@ -34,6 +34,24 @@ const subjectService = {
         limit: limit,
         offset: offset || 0
       }
+    }
+  },
+
+  getSubjectsNames: async (limit, skip, sort, categories, name) => {
+    const query = {}
+    if (categories) query.categoryId = { $in: categories }
+    if (name) query.name = { $regex: name, $options: 'i' }
+
+    const [data, total] = await Promise.all([
+      Subject.find(query, 'name').sort(sort).skip(skip).limit(limit).lean(),
+      Subject.countDocuments(query)
+    ])
+
+    const mappedData = data.map(({ _id, name }) => ({ id: _id.toString(), name }))
+
+    return {
+      data: mappedData,
+      total
     }
   },
 

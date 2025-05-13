@@ -5,6 +5,7 @@ const categoryService = require('~/services/category')
 const { createBadRequestError, createError } = require('~/utils/errorsHelper')
 
 const { DATA_NOT_FOUND } = require('~/consts/errors')
+const subjectService = require('~/services/subject')
 
 const createCategory = async (req, res) => {
   const categoryData = req.body
@@ -35,7 +36,7 @@ const getCategoryNames = async (req, res) => {
 
   const result = await categoryService.getCategoryNames(limit, skip, sort, categories, name)
 
-  res.status(200).json(result)
+  res.status(200).json(result.data)
 }
 
 const getCategories = async (req, res) => {
@@ -46,9 +47,27 @@ const getCategories = async (req, res) => {
   res.status(200).json(result)
 }
 
+const getSubjects = async (req, res) => {
+  const { name, limit, skip } = req.params
+
+  const { data } = await subjectService.getSubjects(limit, skip, name)
+
+  res.status(200).json({ items: data.subjects, count: data.total })
+}
+
+const getSubjectsNames = async (req, res) => {
+  const { limit, skip, sort, categories, name } = req.query
+
+  const { data } = await subjectService.getSubjectsNames(limit, skip, sort, categories, name)
+
+  res.status(200).json({ items: data.subjects, count: data.total })
+}
+
 module.exports = {
   createCategory,
   getCategories,
   getCategoryNames,
-  getCategoryById
+  getCategoryById,
+  getSubjects,
+  getSubjectsNames
 }

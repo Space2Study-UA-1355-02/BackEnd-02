@@ -15,6 +15,8 @@ const {
 router.use(authMiddleware)
 router.get('/', normalizeCategoryQueryParams, asyncWrapper(categoryController.getCategories))
 router.get('/names', normalizeCategoryQueryParams, asyncWrapper(categoryController.getCategoryNames))
+router.get('/subjects', asyncWrapper(categoryController.getSubjects))
+router.get('/subjects/names', normalizeCategoryQueryParams, asyncWrapper(categoryController.getSubjectsNames))
 router.get('/:id', asyncWrapper(categoryController.getCategoryById))
 
 router.use(restrictTo(ADMIN))
