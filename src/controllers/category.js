@@ -48,17 +48,19 @@ const getCategories = async (req, res) => {
 }
 
 const getSubjects = async (req, res) => {
-  const { name, limit, skip } = req.params
+  const { id } = req.params
+  const { name, limit, skip } = req.query
 
-  const { data } = await subjectService.getSubjects(limit, skip, name)
+  const { data } = await subjectService.getSubjects(limit, skip, name, id)
 
   res.status(200).json({ items: data.subjects, count: data.total })
 }
 
 const getSubjectsNames = async (req, res) => {
-  const { limit, skip, sort, categories, name } = req.query
+  const { id } = req.params
+  const { limit, skip, sort, name } = req.query
 
-  const { data } = await subjectService.getSubjectsNames(limit, skip, sort, categories, name)
+  const { data } = await subjectService.getSubjectsNames(limit, skip, sort, name, id)
 
   res.status(200).json({ items: data.subjects, count: data.total })
 }

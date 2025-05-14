@@ -1,4 +1,5 @@
 const Category = require('~/models/category')
+const Subject = require('~/models/subject')
 
 const { createError } = require('~/utils/errorsHelper')
 
@@ -61,13 +62,32 @@ const categoryService = {
       Category.countDocuments(query)
     ])
 
-    const mappedData = data.map(({ _id, name, appearance }) => ({ id: _id.toString(), name, appearance }))
+    const categoriesIds = data.map((item) => item._id)
+
+    const subjectQuery = {
+      category: { $in: categoriesIds }
+    }
+
+    const subjects = await Subject.find(subjectQuery).lean()
+
+    const mappedData = data.map((category) => {
+      const totalOffers = subjects.reduce(
+        (acc, subject) => {
+          if (subject.category.toString() === category._id.toString()) {
+            acc.student += subject.totalOffers.student
+            acc.tutor += acc.tutor + subject.totalOffers.tutor
+          }
+          return acc
+        },
+        { student: 0, tutor: 0 }
+      )
+
+      return { ...category, totalOffers }
+    })
 
     return {
-      data: mappedData,
-      total,
-      limit: limit || total,
-      skip: skip || DEFAULT_CATEGORY_SKIP
+      items: mappedData,
+      count: total
     }
   }
 }

@@ -17,14 +17,16 @@ const subjectService = {
     return subject
   },
 
-  getSubjects: async (limit, offset, search) => {
+  getSubjects: async (limit, offset, search, categoryId) => {
     const limitNumber = parseInt(limit)
     const offsetNumber = parseInt(offset)
 
     const paginationLimit = !isNaN(limitNumber) && limitNumber > 0 ? limitNumber : 10
     const paginationOffset = !isNaN(offsetNumber) && offsetNumber >= 0 ? offsetNumber : 0
 
-    const subjects = await Subject.find().lean()
+    const subjectQuery = categoryId ? { category: categoryId } : null
+
+    const subjects = await Subject.find(subjectQuery).lean()
     const filteredSubjects = filterBySearch(subjects, search)
 
     return {
@@ -37,9 +39,9 @@ const subjectService = {
     }
   },
 
-  getSubjectsNames: async (limit, skip, sort, categories, name) => {
+  getSubjectsNames: async (limit, skip, sort, name, id) => {
     const query = {}
-    if (categories) query.categoryId = { $in: categories }
+    if (id) query.category = id
     if (name) query.name = { $regex: name, $options: 'i' }
 
     const [data, total] = await Promise.all([
