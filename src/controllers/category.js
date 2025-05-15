@@ -51,6 +51,10 @@ const getSubjects = async (req, res) => {
   const { id } = req.params
   const { name, limit, skip } = req.query
 
+  if (id && !mongoose.Types.ObjectId.isValid(id)) {
+    throw createBadRequestError()
+  }
+
   const { data } = await subjectService.getSubjects(limit, skip, name, id)
 
   res.status(200).json({ items: data.subjects, count: data.total })
@@ -60,9 +64,13 @@ const getSubjectsNames = async (req, res) => {
   const { id } = req.params
   const { limit, skip, sort, name } = req.query
 
+  if (id && !mongoose.Types.ObjectId.isValid(id)) {
+    throw createBadRequestError()
+  }
+
   const { data } = await subjectService.getSubjectsNames(limit, skip, sort, name, id)
 
-  res.status(200).json({ items: data.subjects, count: data.total })
+  res.status(200).json(data)
 }
 
 module.exports = {
