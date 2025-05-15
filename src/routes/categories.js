@@ -18,6 +18,8 @@ router.get('/names', normalizeCategoryQueryParams, asyncWrapper(categoryControll
 router.get('/subjects', asyncWrapper(categoryController.getSubjects))
 router.get('/subjects/names', normalizeCategoryQueryParams, asyncWrapper(categoryController.getSubjectsNames))
 router.get('/:id', asyncWrapper(categoryController.getCategoryById))
+router.get('/:id/subjects', asyncWrapper(categoryController.getSubjects))
+router.get('/:id/subjects/names', normalizeCategoryQueryParams, asyncWrapper(categoryController.getSubjectsNames))
 
 router.use(restrictTo(ADMIN))
 router.post('/', validationMiddleware(addCategorySchema), asyncWrapper(categoryController.createCategory))
