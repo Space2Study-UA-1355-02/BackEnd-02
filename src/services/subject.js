@@ -4,7 +4,6 @@ const { NOT_FOUND } = require('~/consts/errors')
 const filterAllowedFields = require('~/utils/filterAllowedFields')
 const { allowedSubjectFieldsForUpdate } = require('~/validation/services/subject')
 const { paginate } = require('~/utils/paginate')
-const { filterBySearch } = require('~/utils/filterBySearch')
 
 const subjectService = {
   getSubjectById: async (id) => {
@@ -24,14 +23,15 @@ const subjectService = {
     const paginationLimit = !isNaN(limitNumber) && limitNumber > 0 ? limitNumber : 10
     const paginationOffset = !isNaN(offsetNumber) && offsetNumber >= 0 ? offsetNumber : 0
 
-    const subjectQuery = categoryId ? { category: categoryId } : null
+    const query = {}
+    if (categoryId) query.category = categoryId
+    if (search) query.name = { $regex: search, $options: 'i' }
 
-    const subjects = await Subject.find(subjectQuery).lean()
-    const filteredSubjects = filterBySearch(subjects, search)
+    const subjects = await Subject.find(query).lean()
 
     return {
       data: {
-        subjects: paginate(filteredSubjects, paginationLimit, paginationOffset),
+        subjects: paginate(subjects, paginationLimit, paginationOffset),
         total: subjects.length,
         limit: limit,
         offset: offset || 0
@@ -49,10 +49,8 @@ const subjectService = {
       Subject.countDocuments(query)
     ])
 
-    const mappedData = data.map(({ _id, name }) => ({ id: _id.toString(), name }))
-
     return {
-      data: mappedData,
+      data,
       total
     }
   },

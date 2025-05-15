@@ -42,10 +42,8 @@ const categoryService = {
       Category.countDocuments(query)
     ])
 
-    const mappedData = data.map(({ _id, name }) => ({ id: _id.toString(), name }))
-
     return {
-      data: mappedData,
+      data,
       total,
       limit: limit || total,
       skip: skip || DEFAULT_CATEGORY_SKIP
